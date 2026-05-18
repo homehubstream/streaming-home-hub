@@ -11,7 +11,7 @@
         .admin-panel { display: flex; flex-direction: row; gap: 20px; padding: 30px 5%; max-width: 1300px; margin: 0 auto; }
         .admin-form { background: #13131a; padding: 25px; border-radius: 8px; width: 35%; border: 1px solid #a200ff; box-shadow: 0 0 10px rgba(162,0,255,0.1); }
         .admin-list { background: #13131a; padding: 25px; border-radius: 8px; width: 65%; border: 1px solid #222230; }
-        select, input { width: 100%; padding: 10px; background: #0b0b0f; color: white; border: 1px solid #2a2a3a; border-radius: 6px; margin-top: 5px; outline: none;}
+        select, input { width: 100%; padding: 10px; background: #0b0b0f; color: white; border: 1px solid #2a2a3a; border-radius: 66px; margin-top: 5px; outline: none;}
         select:focus, input:focus { border-color: #a200ff; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; color: white; font-size: 0.85rem;}
         th, td { padding: 12px; border-bottom: 1px solid #222230; text-align: left; }
@@ -26,7 +26,7 @@
 <body>
 
     <div class="admin-header">
-        <i class="fas fa-lock"></i> PANEL DE CONTROL PRIVADO - STREAMING HOME HUB
+        <i class="fas fa-lock-open"></i> PANEL DE CONTROL PRIVADO - STREAMING HOME HUB
     </div>
 
     <div class="admin-panel">
@@ -100,24 +100,90 @@
         </div>
     </div>
 
-    // 🔐 CONTRASEÑA DE SEGURIDAD PARA TU PANEL DE ADMINISTRADOR
-// Puedes cambiar 'HubAdmin2026' por la clave secreta que tú quieras
-const CLAVE_MAESTRA = 'HubAdmin2026'; 
+    <script>
+        // Iniciar la tabla directamente al cargar la página sin bloqueos
+        document.addEventListener('DOMContentLoaded', mostrarClientes);
 
-// Función de bloqueo inmediato al cargar la página
-(function protegerPanel() {
-    let intento = prompt("🔐 Acceso Privado - STREAMING HOME HUB\n\nIngresa la contraseña de administrador:");
-    
-    if (intento !== CLAVE_MAESTRA) {
-        alert("❌ Contraseña incorrecta. Acceso denegado.");
-        window.location.href = 'index.html'; // Lo bota a la tienda si falla
-    } else {
-        alert("🔓 ¡Bienvenido Administrador!");
-    }
-})();
+        function agregarCliente(e) {
+            e.preventDefault();
+            
+            let database = JSON.parse(localStorage.getItem('hub_db')) || [];
+            
+            let username = document.getElementById('nuevo-usuario').value.trim().toLowerCase();
+            let pass = document.getElementById('nuevo-pass').value;
+            let plataforma = document.getElementById('nueva-plat').value;
+            let accesoCorreo = document.getElementById('nuevo-acceso-correo').value;
+            let accesoPass = document.getElementById('nuevo-acceso-pass').value;
+            let perfilNombre = document.getElementById('nuevo-perfil-nombre').value;
+            let perfilPin = document.getElementById('nuevo-perfil-pin').value || 'Sin PIN';
 
-// El resto de tu código original de admin.html sigue aquí abajo igual...
-document.addEventListener('DOMContentLoaded', mostrarClientes);
-// ...
+            let timestampVencimiento = Date.now() + (30 * 24 * 60 * 60 * 1000);
+
+            let nuevaCuenta = {
+                plataforma,
+                accesoCorreo,
+                accesoPass,
+                perfilNombre,
+                perfilPin,
+                vencimiento: timestampVencimiento
+            };
+
+            let usuarioExistente = database.find(u => u.username === username);
+
+            if (usuarioExistente) {
+                usuarioExistente.servicios.push(nuevaCuenta);
+            } else {
+                database.push({
+                    username: username,
+                    password: pass,
+                    servicios: [nuevaCuenta]
+                });
+            }
+
+            localStorage.setItem('hub_db', JSON.stringify(database));
+            alert("¡Registro guardado con éxito! El cliente ya puede iniciar sesión.");
+            e.target.reset();
+            mostrarClientes();
+        }
+
+        function mostrarClientes() {
+            let database = JSON.parse(localStorage.getItem('hub_db')) || [];
+            let tabla = document.getElementById('tabla-clientes');
+            tabla.innerHTML = '';
+
+            database.forEach((user, userIdx) => {
+                user.servicios.forEach((serv, servIdx) => {
+                    let tiempoRestante = serv.vencimiento - Date.now();
+                    let dias = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+                    let textoDias = dias > 0 ? `${dias} días` : 'Vencido';
+                    let colorDias = dias > 1 ? '#00ff66' : '#ff0055';
+
+                    let row = tabla.insertRow();
+                    row.innerHTML = `
+                        <td><strong>${user.username}</strong> (Clave: ${user.password})</td>
+                        <td style="color:#9d4edd">${serv.plataforma}</td>
+                        <td>${serv.accesoCorreo}<br><small style="color:#8b8b9a">${serv.accesoPass}</small></td>
+                        <td>${serv.perfilNombre}<br><small style="color:#a200ff">PIN: ${serv.perfilPin}</small></td>
+                        <td style="color:${colorDias}; font-weight:bold;">${textoDias}</td>
+                        <td><button class="btn-delete" onclick="eliminarServicio(${userIdx}, ${servIdx})"><i class="fas fa-trash"></i></button></td>
+                    `;
+                });
+            });
+        }
+
+        function eliminarServicio(userIdx, servIdx) {
+            if(confirm("¿Seguro que deseas eliminar esta cuenta asignada?")) {
+                let database = JSON.parse(localStorage.getItem('hub_db')) || [];
+                database[userIdx].servicios.splice(servIdx, 1);
+                
+                if(database[userIdx].servicios.length === 0) {
+                    database.splice(userIdx, 1);
+                }
+                
+                localStorage.setItem('hub_db', JSON.stringify(database));
+                mostrarClientes();
+            }
+        }
+    </script>
 </body>
 </html>
