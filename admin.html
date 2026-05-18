@@ -6,12 +6,16 @@
     <title>Admin - STREAMING HOME HUB</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
         .admin-header { background: #a200ff; padding: 15px; text-align: center; font-weight: bold; box-shadow: 0 0 15px rgba(162,0,255,0.5); }
         .admin-panel { display: flex; flex-direction: row; gap: 20px; padding: 30px 5%; max-width: 1300px; margin: 0 auto; }
         .admin-form { background: #13131a; padding: 25px; border-radius: 8px; width: 35%; border: 1px solid #a200ff; box-shadow: 0 0 10px rgba(162,0,255,0.1); }
         .admin-list { background: #13131a; padding: 25px; border-radius: 8px; width: 65%; border: 1px solid #222230; }
-        select, input { width: 100%; padding: 10px; background: #0b0b0f; color: white; border: 1px solid #2a2a3a; border-radius: 66px; margin-top: 5px; outline: none;}
+        select, input { width: 100%; padding: 10px; background: #0b0b0f; color: white; border: 1px solid #2a2a3a; border-radius: 6px; margin-top: 5px; outline: none;}
         select:focus, input:focus { border-color: #a200ff; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; color: white; font-size: 0.85rem;}
         th, td { padding: 12px; border-bottom: 1px solid #222230; text-align: left; }
@@ -32,7 +36,7 @@
     <div class="admin-panel">
         <div class="admin-form">
             <h2>Registrar Venta</h2>
-            <form onsubmit="agregarCliente(event)">
+            <form id="formulario-registro" onsubmit="agregarCliente(event)">
                 
                 <div class="sub-title"><i class="fas fa-user-shield"></i> 1. ACCESO DEL CLIENTE A LA WEB</div>
                 <div class="form-group">
@@ -82,7 +86,7 @@
         </div>
 
         <div class="admin-list">
-            <h2><i class="fas fa-database"></i> Base de Datos de Cuentas Asignadas</h2>
+            <h2><i class="fas fa-database"></i> Base de Datos en la Nube (Firebase)</h2>
             <table>
                 <thead>
                     <tr>
@@ -95,19 +99,37 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-clientes">
-                    </tbody>
+                    <tr><td colspan="6" style="text-align:center; color:#8b8b9a;">Conectando con la nube de Google...</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // Iniciar la tabla directamente al cargar la página sin bloqueos
-        document.addEventListener('DOMContentLoaded', mostrarClientes);
+        // Tus credenciales oficiales de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBNxBidzO-jH7jJrFQzsz2JBDwpk2pDFo",
+            authDomain: "streaming-home-hub.firebaseapp.com",
+            projectId: "streaming-home-hub",
+            storageBucket: "streaming-home-hub.firebasestorage.app",
+            messagingSenderId: "541294461205",
+            appId: "1:541294461205:web:bf0984d03dee964d52291c",
+            measurementId: "G-0XGB3PBZXG"
+        };
+
+        // Inicializar Firebase de forma segura
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Escuchar la base de datos en tiempo real
+        db.collection("usuarios").onSnapshot((snapshot) => {
+            mostrarClientes(snapshot);
+        }, (error) => {
+            console.error("Error en Firebase: ", error);
+        });
 
         function agregarCliente(e) {
             e.preventDefault();
-            
-            let database = JSON.parse(localStorage.getItem('hub_db')) || [];
             
             let username = document.getElementById('nuevo-usuario').value.trim().toLowerCase();
             let pass = document.getElementById('nuevo-pass').value;
@@ -119,7 +141,7 @@
 
             let timestampVencimiento = Date.now() + (30 * 24 * 60 * 60 * 1000);
 
-            let nuevaCuenta = {
+            let nuevoServicio = {
                 plataforma,
                 accesoCorreo,
                 accesoPass,
@@ -128,60 +150,78 @@
                 vencimiento: timestampVencimiento
             };
 
-            let usuarioExistente = database.find(u => u.username === username);
+            let userRef = db.collection("usuarios").doc(username);
 
-            if (usuarioExistente) {
-                usuarioExistente.servicios.push(nuevaCuenta);
-            } else {
-                database.push({
-                    username: username,
-                    password: pass,
-                    servicios: [nuevaCuenta]
-                });
-            }
-
-            localStorage.setItem('hub_db', JSON.stringify(database));
-            alert("¡Registro guardado con éxito! El cliente ya puede iniciar sesión.");
-            e.target.reset();
-            mostrarClientes();
+            userRef.get().then((doc) => {
+                if (doc.exists) {
+                    userRef.update({
+                        servicios: firebase.firestore.FieldValue.arrayUnion(nuevoServicio)
+                    }).then(() => {
+                        alert("¡Guardado en la Nube con éxito!");
+                        document.getElementById('formulario-registro').reset();
+                    });
+                } else {
+                    userRef.set({
+                        password: pass,
+                        servicios: [nuevoServicio]
+                    }).then(() => {
+                        alert("¡Guardado en la Nube con éxito!");
+                        document.getElementById('formulario-registro').reset();
+                    });
+                }
+            }).catch(err => alert("Error al conectar con la nube: " + err));
         }
 
-        function mostrarClientes() {
-            let database = JSON.parse(localStorage.getItem('hub_db')) || [];
+        function mostrarClientes(snapshot) {
             let tabla = document.getElementById('tabla-clientes');
             tabla.innerHTML = '';
 
-            database.forEach((user, userIdx) => {
-                user.servicios.forEach((serv, servIdx) => {
-                    let tiempoRestante = serv.vencimiento - Date.now();
-                    let dias = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
-                    let textoDias = dias > 0 ? `${dias} días` : 'Vencido';
-                    let colorDias = dias > 1 ? '#00ff66' : '#ff0055';
+            if (snapshot.empty) {
+                tabla.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#8b8b9a;">No hay clientes registrados en la nube aún.</td></tr>';
+                return;
+            }
 
-                    let row = tabla.insertRow();
-                    row.innerHTML = `
-                        <td><strong>${user.username}</strong> (Clave: ${user.password})</td>
-                        <td style="color:#9d4edd">${serv.plataforma}</td>
-                        <td>${serv.accesoCorreo}<br><small style="color:#8b8b9a">${serv.accesoPass}</small></td>
-                        <td>${serv.perfilNombre}<br><small style="color:#a200ff">PIN: ${serv.perfilPin}</small></td>
-                        <td style="color:${colorDias}; font-weight:bold;">${textoDias}</td>
-                        <td><button class="btn-delete" onclick="eliminarServicio(${userIdx}, ${servIdx})"><i class="fas fa-trash"></i></button></td>
-                    `;
-                });
+            snapshot.forEach((doc) => {
+                let user = doc.data();
+                let username = doc.id;
+
+                if(user.servicios && user.servicios.length > 0) {
+                    user.servicios.forEach((serv, index) => {
+                        let tiempoRestante = serv.vencimiento - Date.now();
+                        let dias = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+                        let textoDias = dias > 0 ? `${dias} días` : 'Vencido';
+                        let colorDias = dias > 1 ? '#00ff66' : '#ff0055';
+
+                        let row = tabla.insertRow();
+                        row.innerHTML = `
+                            <td><strong>${username}</strong> (Clave: ${user.password})</td>
+                            <td style="color:#9d4edd">${serv.plataforma}</td>
+                            <td>${serv.accesoCorreo}<br><small style="color:#8b8b9a">${serv.accesoPass}</small></td>
+                            <td>${serv.perfilNombre}<br><small style="color:#a200ff">PIN: ${serv.perfilPin}</small></td>
+                            <td style="color:${colorDias}; font-weight:bold;">${textoDias}</td>
+                            <td><button class="btn-delete" onclick="eliminarServicio('${username}', ${index})"><i class="fas fa-trash"></i></button></td>
+                        `;
+                    });
+                }
             });
         }
 
-        function eliminarServicio(userIdx, servIdx) {
+        function eliminarServicio(username, index) {
             if(confirm("¿Seguro que deseas eliminar esta cuenta asignada?")) {
-                let database = JSON.parse(localStorage.getItem('hub_db')) || [];
-                database[userIdx].servicios.splice(servIdx, 1);
-                
-                if(database[userIdx].servicios.length === 0) {
-                    database.splice(userIdx, 1);
-                }
-                
-                localStorage.setItem('hub_db', JSON.stringify(database));
-                mostrarClientes();
+                let userRef = db.collection("usuarios").doc(username);
+
+                userRef.get().then((doc) => {
+                    if(doc.exists) {
+                        let servicios = doc.data().servicios;
+                        servicios.splice(index, 1);
+
+                        if(servicios.length === 0) {
+                            userRef.delete();
+                        } else {
+                            userRef.update({ servicios: servicios });
+                        }
+                    }
+                });
             }
         }
     </script>
