@@ -3,356 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥🍿 ＳＴＲＥＡＭＩＮＧ ＨＯＭＥ ＨＵＢ 🍿🔥</title>
+    <title>STREAMING HOME HUB - Tu Entretenimiento al Mejor Precio</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos base para el catálogo neón */
+        body { background-color: #0b0b0f; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        .hero { text-align: center; padding: 60px 20px; background: linear-gradient(180deg, #13131a 0%, #0b0b0f 100%); border-bottom: 1px solid #a200ff33; }
+        .hero h1 { font-size: 3rem; margin: 0; color: white; }
+        .hero h1 span { color: #a200ff; text-shadow: 0 0 15px rgba(162, 0, 255, 0.6); }
+        .hero p { color: #8b8b9a; font-size: 1.1rem; margin-top: 10px; }
+        
+        .btn-zone { display: inline-block; margin-top: 20px; background: #a200ff; color: white; padding: 12px 25px; border-radius: 5px; text-decoration: none; font-weight: bold; box-shadow: 0 0 15px rgba(162,0,255,0.4); transition: 0.3s; }
+        .btn-zone:hover { background: #9d4edd; box-shadow: 0 0 20px rgba(162,0,255,0.8); }
+
+        .catalog-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .category-title { color: #9d4edd; font-size: 1.8rem; margin-bottom: 20px; border-left: 5px solid #a200ff; padding-left: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        /* Grid de Productos */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; margin-bottom: 60px; }
+        .product-card { background: #13131a; border: 1px solid #222230; border-radius: 10px; padding: 20px; text-align: center; transition: 0.3s; position: relative; overflow: hidden; }
+        .product-card:hover { border-color: #a200ff; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(162, 0, 255, 0.2); }
+        
+        .product-icon { font-size: 2.5rem; color: #a200ff; margin-bottom: 15px; }
+        .product-card h3 { margin: 10px 0; font-size: 1.3rem; }
+        .product-price { font-size: 1.5rem; color: #00ff66; font-weight: bold; margin: 15px 0; text-shadow: 0 0 10px rgba(0,255,102,0.2); }
+        
+        .btn-buy { display: block; background: transparent; color: white; border: 1px solid #a200ff; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .btn-buy:hover { background: #a200ff; box-shadow: 0 0 10px rgba(162,0,255,0.5); }
+
+        /* Estilo especial para sección A Dominio */
+        .dominio-section { background: rgba(162, 0, 255, 0.03); border: 1px dashed #a200ff55; padding: 30px; border-radius: 15px; margin-top: 40px; }
+        .product-card.dominio-card { border-color: #2a1a4a; }
+        .product-card.dominio-card:hover { border-color: #00ff66; box-shadow: 0 5px 15px rgba(0, 255, 102, 0.2); }
+        .product-card.dominio-card .product-icon { color: #00ff66; }
+        .product-card.dominio-card .btn-buy { border-color: #00ff66; }
+        .product-card.dominio-card .btn-buy:hover { background: #00ff66; color: black; box-shadow: 0 0 10px rgba(0,255,102,0.5); }
+    </style>
 </head>
 <body>
-    
-    <header class="navbar">
-        <div class="nav-logo">
-            <h1>🔥🍿 ＳＴＲＥＡＭＩＮＧ <span>ＨＯＭＥ ＨＵＢ</span> 🍿🔥</h1>
-        </div>
-        <nav class="nav-links">
-            <a href="#catalogo"><i class="fas fa-th-large"></i> Catálogo</a>
-            <a href="#soporte"><i class="fas fa-headset"></i> Soporte</a>
-            <a href="login.html" class="btn-client-zone"><i class="fas fa-user"></i> Zona Cliente</a>
-        </nav>
-    </header>
 
-    <main id="catalogo" class="catalog-container">
-        <h2 class="section-title">🍿 Nuestro Catálogo de Plataformas</h2>
-        <div class="products-grid">
-            
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <defs>
-                            <linearGradient id="net-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#FF003c" />
-                                <stop offset="100%" stop-color="#7a001e" />
-                            </linearGradient>
-                        </defs>
-                        <rect x="10" y="20" width="80" height="60" rx="8" fill="none" stroke="url(#net-grad)" stroke-width="4" />
-                        <path d="M 30,35 L 30,65 M 30,35 L 70,65 M 70,35 L 70,65" stroke="url(#net-grad)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <h3>Netflix Premium</h3>
-                <div class="price">S/12.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Netflix Premium', 'S/12.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <defs>
-                            <linearGradient id="dis-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#00CEFF" />
-                                <stop offset="100%" stop-color="#001C7A" />
-                            </linearGradient>
-                        </defs>
-                        <circle cx="50" cy="50" r="35" fill="none" stroke="url(#dis-grad)" stroke-width="4" />
-                        <path d="M 25,60 C 40,25 70,30 80,45" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" style="filter: drop-shadow(0px 0px 5px #00CEFF);" />
-                        <polygon points="50,45 52,52 59,52 54,56 56,63 50,59 44,63 46,56 41,52 48,52" fill="#FFFFFF" />
-                    </svg>
-                </div>
-                <h3>Disney+</h3>
-                <p class="product-desc">Full ESPN</p>
-                <div class="price">S/6.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Disney+', 'S/6.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="35" fill="none" stroke="#0043ff" stroke-width="6" />
-                        <circle cx="50" cy="50" r="20" fill="none" stroke="#00D4FF" stroke-width="4" />
-                        <circle cx="50" cy="50" r="7" fill="#FFFFFF" />
-                    </svg>
-                </div>
-                <h3>Max</h3>
-                <p class="product-desc">HBO Max</p>
-                <div class="price">S/3.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Max', 'S/3.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <path d="M 15,50 C 30,15 70,15 85,50 C 70,85 30,85 15,50 Z" fill="none" stroke="#F47521" stroke-width="5" />
-                        <circle cx="45" cy="50" r="18" fill="#FFB800" />
-                        <circle cx="42" cy="50" r="8" fill="#13131a" />
-                    </svg>
-                </div>
-                <h3>Crunchyroll+</h3>
-                <div class="price">S/2.50</div>
-                <button class="buy-btn" onclick="abrirPedido('Crunchyroll+', 'S/2.50')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <path d="M 25,35 L 50,20 L 75,35 L 75,65 L 50,80 L 25,65 Z" fill="none" stroke="#00A8E1" stroke-width="4" />
-                        <path d="M 30,55 Q 50,75 70,55" fill="none" stroke="#FF9900" stroke-width="5" stroke-linecap="round" />
-                        <polygon points="65,60 73,53 73,65" fill="#FF9900" />
-                    </svg>
-                </div>
-                <h3>Prime Video</h3>
-                <div class="price">S/3.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Prime Video', 'S/3.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <polygon points="50,20 20,75 80,75" fill="none" stroke="#0064FF" stroke-width="5" stroke-linejoin="round" />
-                        <polygon points="50,40 35,75 65,75" fill="#002288" />
-                        <circle cx="50" cy="12" r="2" fill="#FFF" /><circle cx="35" cy="25" r="2" fill="#FFF" /><circle cx="65" cy="25" r="2" fill="#FFF" />
-                    </svg>
-                </div>
-                <h3>Paramount+</h3>
-                <div class="price">S/3.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Paramount+', 'S/3.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <polygon points="35,20 80,50 35,80" fill="none" stroke="#FF4A00" stroke-width="5" stroke-linejoin="round" />
-                        <span style="color: #FF8800">
-                            <polygon points="43,35 68,50 43,65" fill="#FF8800" />
-                        </span>
-                    </svg>
-                </div>
-                <h3>Vix Premium</h3>
-                <div class="price">S/2.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Vix Premium', 'S/2.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <path d="M 20,50 A 30,30 0 1,1 80,50 A 30,30 0 1,1 20,50" fill="none" stroke="#00C4CC" stroke-width="4" stroke-dasharray="6,4" />
-                        <polygon points="50,30 68,48 50,66 32,48" fill="#7d2ae8" />
-                    </svg>
-                </div>
-                <h3>Canva Pro</h3>
-                <div class="price">S/2.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Canva Pro', 'S/2.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="35" fill="none" stroke="#1DB954" stroke-width="4" />
-                        <line x1="35" y1="50" x2="65" y2="50" stroke="#1DB954" stroke-width="6" stroke-linecap="round" />
-                        <line x1="38" y1="40" x2="62" y2="40" stroke="#1DB954" stroke-width="5" stroke-linecap="round" />
-                        <line x1="42" y1="60" x2="58" y2="60" stroke="#1DB954" stroke-width="5" stroke-linecap="round" />
-                    </svg>
-                </div>
-                <h3>Spotify Premium</h3>
-                <div class="price">S/7.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Spotify Premium', 'S/7.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <rect x="15" y="25" width="70" height="50" rx="12" fill="none" stroke="#FF0000" stroke-width="5" />
-                        <polygon points="42,38 65,50 42,62" fill="#FFFFFF" />
-                    </svg>
-                </div>
-                <h3>YouTube Premium</h3>
-                <p class="product-desc">Activación a correo / Renovable</p>
-                <div class="price">S/4.00</div>
-                <button class="buy-btn" onclick="abrirPedido('YouTube Premium', 'S/4.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <rect x="15" y="20" width="70" height="50" rx="4" fill="none" stroke="#FFFFFF" stroke-width="4" />
-                        <line x1="40" y1="70" x2="30" y2="85" stroke="#FFFFFF" stroke-width="4" />
-                        <line x1="60" y1="70" x2="70" y2="85" stroke="#FFFFFF" stroke-width="4" />
-                        <circle cx="50" cy="45" r="8" fill="#9D4EDD" />
-                    </svg>
-                </div>
-                <h3>IPTV</h3>
-                <p class="product-desc">Canales del Mundo</p>
-                <div class="price">S/6.00</div>
-                <button class="buy-btn" onclick="abrirPedido('IPTV', 'S/6.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <circle cx="50" cy="55" r="22" fill="none" stroke="#FFFFFF" stroke-width="4" />
-                        <path d="M 50,33 Q 55,23 63,26" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" />
-                        <rect x="20" y="15" width="60" height="70" rx="8" fill="none" stroke="#444" stroke-width="2" stroke-dasharray="4,4" />
-                    </svg>
-                </div>
-                <h3>Apple TV+</h3>
-                <div class="price">S/5.00</div>
-                <button class="buy-btn" onclick="abrirPedido('Apple TV+', 'S/5.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="10" fill="#10A37F" />
-                        <circle cx="25" cy="35" r="6" fill="#10A37F" /><circle cx="75" cy="35" r="6" fill="#10A37F" />
-                        <circle cx="25" cy="65" r="6" fill="#10A37F" /><circle cx="75" cy="65" r="6" fill="#10A37F" />
-                        <line x1="50" y1="50" x2="25" y2="35" stroke="#10A37F" stroke-width="2" />
-                        <line x1="50" y1="50" x2="75" y2="35" stroke="#10A37F" stroke-width="2" />
-                        <line x1="50" y1="50" x2="25" y2="65" stroke="#10A37F" stroke-width="2" />
-                        <line x1="50" y1="50" x2="75" y2="65" stroke="#10A37F" stroke-width="2" />
-                    </svg>
-                </div>
-                <h3>ChatGPT Plus</h3>
-                <p class="product-desc">Cuenta real, No APK</p>
-                <div class="price">S/6.00</div>
-                <button class="buy-btn" onclick="abrirPedido('ChatGPT Plus', 'S/6.00')">Adquirir</button>
-            </div>
-
-            <div class="product-card">
-                <div class="svg-icon-container">
-                    <svg class="custom-svg" viewBox="0 0 100 100">
-                        <path d="M 20,35 L 45,20 L 45,80 L 20,65 Z" fill="none" stroke="#FFFFFF" stroke-width="4" />
-                        <path d="M 80,35 L 55,20 L 55,80 L 80,65 Z" fill="none" stroke="#00C4CC" stroke-width="4" />
-                        <circle cx="50" cy="50" r="5" fill="#FF0055" />
-                    </svg>
-                </div>
-                <h3>CapCut Pro</h3>
-                <p class="product-desc">Renovable</p>
-                <div class="price">S/6.00</div>
-                <button class="buy-btn" onclick="abrirPedido('CapCut Pro', 'S/6.00')">Adquirir</button>
-            </div>
-
-        </div>
-    </main>
-
-    <section id="referencias" class="references-container">
-        <h2 class="section-title"><i class="fas fa-star" style="color: #FFD700;"></i> Referencias y Clientes Satisfechos</h2>
-        <p class="references-subtitle">La honestidad y rapidez nos respaldan. Mira las capturas reales de clientes que ya disfrutan de su servicio:</p>
-        
-        <div class="references-grid">
-            
-            <div class="reference-card">
-                <div class="reference-img-box">
-                    <img src="imagen/imagen/referencia_01.png" alt="Referencia 1" onerror="this.src='https://via.placeholder.com/300x500/13131a/a200ff?text=Error+01'">
-                </div>
-                <div class="reference-info">
-                    <span class="ref-badge"><i class="fas fa-check-circle"></i> Entrega Inmediata</span>
-                    <p>Netflix Premium contratado con éxito y perfil asignado.</p>
-                </div>
-            </div>
-
-            <div class="reference-card">
-                <div class="reference-img-box">
-                    <img src="imagen/imagen/referencia_02.png" alt="Referencia 2" onerror="this.src='https://via.placeholder.com/300x500/13131a/a200ff?text=Error+02'">
-                </div>
-                <div class="reference-info">
-                    <span class="ref-badge"><i class="fas fa-check-circle"></i> Cliente Feliz</span>
-                    <p>YouTube Premium activado directamente a su correo personal.</p>
-                </div>
-            </div>
-
-            <div class="reference-card">
-                <div class="reference-img-box">
-                    <img src="imagen/imagen/referencia_03.png" alt="Referencia 3" onerror="this.src='https://via.placeholder.com/300x500/13131a/a200ff?text=Error+03'">
-                </div>
-                <div class="reference-info">
-                    <span class="ref-badge"><i class="fas fa-check-circle"></i> Combo Activo</span>
-                    <p>Disney+ y Max funcionando a la perfección sin caídas.</p>
-                </div>
-            </div>
-
-            <div class="reference-card">
-                <div class="reference-img-box">
-                    <img src="imagen/imagen/referencia_04.png" alt="Referencia 4" onerror="this.src='https://via.placeholder.com/300x500/13131a/a200ff?text=Error+04'">
-                </div>
-                <div class="reference-info">
-                    <span class="ref-badge"><i class="fas fa-check-circle"></i> 100% Confiable</span>
-                    <p>Soporte técnico rápido y amable respondiendo dudas.</p>
-                </div>
-            </div>
-
-            <div class="reference-card">
-                <div class="reference-img-box">
-                    <img src="imagen/imagen/referencia_05.png" alt="Referencia 5" onerror="this.src='https://via.placeholder.com/300x500/13131a/a200ff?text=Error+05'">
-                </div>
-                <div class="reference-info">
-                    <span class="ref-badge"><i class="fas fa-check-circle"></i> Renovación Rápida</span>
-                    <p>Cliente antiguo renovando su mes de Spotify Premium.</p>
-                </div>
-            </div>
-
-            <div class="reference-card">
-                <div class="reference-img-box">
-                    <img src="imagen/imagen/referencia_06.png" alt="Referencia 6" onerror="this.src='https://via.placeholder.com/300x500/13131a/a200ff?text=Error+06'">
-                </div>
-                <div class="reference-info">
-                    <span class="ref-badge"><i class="fas fa-check-circle"></i> Súper Recomendado</span>
-                    <p>Acceso a IPTV con todos los canales latinos estables.</p>
-                </div>
-            </div>
-
-        </div>
+    <section class="hero">
+        <h1>STREAMING <span>HOME HUB</span></h1>
+        <p>Tu proveedor de confianza para Netflix, Disney+, Max y mucho más. Cuentas estables con garantía total.</p>
+        <a href="login.html" class="btn-zone"><i class="fas fa-user-lock"></i> Entrar a Mi Zona de Cliente</a>
     </section>
 
-    <div id="modal-pedido" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="cerrarModal()">&times;</span>
+    <main class="catalog-container">
+
+        <h2 class="category-title"><i class="fas fa-play-circle"></i> Cuentas Digitales Tradicionales</h2>
+        <div class="products-grid">
             
-            <div id="pantalla-encuesta">
-                <h2 class="modal-title">Configurar <span id="modal-plataforma-nombre">Plataforma</span></h2>
-                <form onsubmit="procederAPago(event)">
-                    <div class="form-group">
-                        <label id="label-dato-principal" for="perfil-nombre"><i class="fas fa-user-tag"></i> Nombre para el Perfil:</label>
-                        <input type="text" id="perfil-nombre" required>
-                    </div>
-                    <div class="form-group" id="caja-pin-completa">
-                        <label for="perfil-pin"><i class="fas fa-lock"></i> PIN de Seguridad:</label>
-                        <div class="pin-container">
-                            <input type="text" id="perfil-pin">
-                            <button type="button" class="btn-random" onclick="generarPinRandom()">⚡ Aleatorio</button>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn-proceder">Siguiente <i class="fas fa-arrow-right"></i></button>
-                </form>
+            <div class="product-card" style="border: 1px solid #a200ff;">
+                <div class="product-icon"><i class="fas fa-brain"></i></div>
+                <h3>Gemini Plus IA</h3>
+                <p style="color: #8b8b9a; font-size: 0.85rem;">Inteligencia Artificial Avanzada. Se entrega correo y contraseña privada.</p>
+                <div class="product-price">S/ 3.00 <span style="font-size:0.8rem; color:#8b8b9a;">/ mes</span></div>
+                <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20adquirir%20Gemini%20Plus%20por%20S/%203" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
             </div>
 
-            <div id="pantalla-pago" class="hidden">
-                <div class="loading-box"><div class="spinner"></div><h3>Cargando su pedido...</h3></div>
-                
-                <div class="yape-info">
-                    <p class="yape-alert">⚠️ Realiza el pago por Yape para procesar:</p>
-                    <div class="yape-number"><i class="fas fa-mobile-alt"></i> 916 982 923</div>
-                    <p class="price-total">Total a pagar: <span id="yape-precio">S/0.00</span></p>
-                </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fas fa-tv"></i></div>
+                <h3>Netflix Premium</h3>
+                <p style="color: #8b8b9a; font-size: 0.85rem;">Perfil Privado en Ultra HD 4K. Con PIN de seguridad incluido.</p>
+                <div class="product-price">S/ 12.00</div>
+                <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20adquirir%20Netflix%20Premium" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
 
-                <div class="whatsapp-instruction">
-                    <p><i class="fas fa-camera"></i> *OBLIGATORIO:* Realiza el Yapeo, **toma una captura de pantalla del comprobante** y presiona el botón de abajo para enviarla al chat junto con tus datos registrados.</p>
-                </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fas fa-film"></i></div>
+                <h3>Disney+ Premium</h3>
+                <p style="color: #8b8b9a; font-size: 0.85rem;">Todo el catálogo de Disney, Pixar, Marvel, Star y deportes en vivo.</p>
+                <div class="product-price">S/ 10.00</div>
+                <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20adquirir%20Disney%2B" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
 
-                <button class="btn-whatsapp-send" onclick="enviarPedidoWhatsApp()">
-                    <i class="fab fa-whatsapp"></i> Adjuntar Captura y Enviar Datos
-                </button>
+            <div class="product-card">
+                <div class="product-icon"><i class="fas fa-compact-disc"></i></div>
+                <h3>Max Premium</h3>
+                <p style="color: #8b8b9a; font-size: 0.85rem;">Exclusivos de HBO, Warner Bros, Discovery y Champions League.</p>
+                <div class="product-price">S/ 9.00</div>
+                <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20adquirir%20Max" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+
+            <div class="product-card">
+                <div class="product-icon"><i class="fab fa-youtube"></i></div>
+                <h3>YouTube Premium</h3>
+                <p style="color: #8b8b9a; font-size: 0.85rem;">Cero anuncios comerciales, reproducción en segundo plano y YT Music.</p>
+                <div class="product-price">S/ 7.00</div>
+                <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20adquirir%20YouTube%20Premium" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
+            </div>
+
+            <div class="product-card">
+                <div class="product-icon"><i class="fab fa-spotify"></i></div>
+                <h3>Spotify Premium</h3>
+                <p style="color: #8b8b9a; font-size: 0.85rem;">Música ilimitada sin anuncios y descarga de canciones en alta fidelidad.</p>
+                <div class="product-price">S/ 6.00</div>
+                <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20adquirir%20Spotify%20Premium" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Solicitar por WhatsApp</a>
             </div>
         </div>
-    </div>
 
-    <footer id="soporte" class="footer-support">
-        <div class="support-box">
-            <h3><i class="fas fa-headset"></i> ¿Problemas con tus cuentas o caídas?</h3>
-            <p>El encargado de soporte técnico está listo para ayudarte de inmediato con tus accesos y renovaciones.</p>
-            <a href="https://wa.me/51916982923?text=Hola%20Streaming%20Home%20Hub,%20necesito%20soporte%20con%20una%20cuenta." target="_blank" class="support-btn">
-                <i class="fab fa-whatsapp"></i> Contactar a Soporte Técnico (916982923)
-            </a>
+        <div class="dominio-section">
+            <h2 class="category-title" style="color: #00ff66; border-left-color: #00ff66;"><i class="fas fa-id-card"></i> Apartado: Plataformas a tu Propio Dominio</h2>
+            <p style="color:#8b8b9a; margin-top:-10px; margin-bottom:25px; font-size:0.9rem;">Cuentas completas creadas o renovadas directamente con tu correo personal. Tú tienes el control absoluto.</p>
+            
+            <div class="products-grid">
+                <div class="product-card dominio-card">
+                    <div class="product-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Netflix Completa (A Dominio)</h3>
+                    <p style="color: #8b8b9a; font-size: 0.85rem;">Cuenta completa de 4 pantallas a tu propio correo. Olvídate de caídas.</p>
+                    <div class="product-price" style="color:#00ff66;">Consultar Precio</div>
+                    <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20información%20de%20Netflix%20a%20Dominio" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Cotizar por WhatsApp</a>
+                </div>
+
+                <div class="product-card dominio-card">
+                    <div class="product-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Disney+ Completa (A Dominio)</h3>
+                    <p style="color: #8b8b9a; font-size: 0.85rem;">Tu correo personal transformado en una cuenta Premium completa.</p>
+                    <div class="product-price" style="color:#00ff66;">Consultar Precio</div>
+                    <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20información%20de%20Disney%2B%20a%20Dominio" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Cotizar por WhatsApp</a>
+                </div>
+
+                <div class="product-card dominio-card">
+                    <div class="product-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>YouTube Familiar (A Dominio)</h3>
+                    <p style="color: #8b8b9a; font-size: 0.85rem;">Activación directa a tus correos personales por el tiempo contratado.</p>
+                    <div class="product-price" style="color:#00ff66;">Consultar Precio</div>
+                    <a href="https://wa.me/51999999999?text=Hola%20José,%20quiero%20información%20de%20YouTube%20a%20Dominio" target="_blank" class="btn-buy"><i class="fab fa-whatsapp"></i> Cotizar por WhatsApp</a>
+                </div>
+            </div>
         </div>
-        <p class="credits">&copy; 2026 🔥🍿 STREAMING HOME HUB 🍿🔥 - Todos los derechos reservados.</p>
+
+    </main>
+
+    <footer style="text-align:center; padding: 30px; color:#444455; font-size:0.85rem; border-top:1px solid #13131a; margin-top:40px;">
+        &copy; 2026 STREAMING HOME HUB - Todos los derechos reservados.
     </footer>
 
-    <script src="script.js"></script>
 </body>
 </html>
