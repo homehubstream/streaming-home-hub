@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - STREAMING HOME HUB</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-header { background: #a200ff; padding: 15px; text-align: center; font-weight: bold; box-shadow: 0 0 15px rgba(162,0,255,0.5); }
+        .admin-panel { display: flex; flex-direction: row; gap: 20px; padding: 30px 5%; max-width: 1300px; margin: 0 auto; }
+        .admin-form { background: #13131a; padding: 25px; border-radius: 8px; width: 35%; border: 1px solid #a200ff; box-shadow: 0 0 10px rgba(162,0,255,0.1); }
+        .admin-list { background: #13131a; padding: 25px; border-radius: 8px; width: 65%; border: 1px solid #222230; }
+        select, input { width: 100%; padding: 10px; background: #0b0b0f; color: white; border: 1px solid #2a2a3a; border-radius: 6px; margin-top: 5px; outline: none;}
+        select:focus, input:focus { border-color: #a200ff; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; color: white; font-size: 0.85rem;}
+        th, td { padding: 12px; border-bottom: 1px solid #222230; text-align: left; }
+        th { color: #a200ff; }
+        .btn-add { background: #a200ff; color: white; border: none; padding: 12px; width: 100%; cursor: pointer; font-weight: bold; border-radius: 5px; margin-top: 20px; transition: 0.3s; }
+        .btn-add:hover { background: #9d4edd; box-shadow: 0 0 15px rgba(162,0,255,0.6); }
+        .btn-delete { background: #ff0055; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .section-separator { border-top: 1px dashed #2a2a3a; margin: 20px 0; padding-top: 15px; }
+        .sub-title { color: #9d4edd; font-size: 0.95rem; margin-bottom: 10px; font-weight: bold;}
+    </style>
+</head>
+<body>
+
+    <div class="admin-header">
+        <i class="fas fa-lock"></i> PANEL DE CONTROL PRIVADO - STREAMING HOME HUB
+    </div>
+
+    <div class="admin-panel">
+        <div class="admin-form">
+            <h2>Registrar Venta</h2>
+            <form onsubmit="agregarCliente(event)">
+                
+                <div class="sub-title"><i class="fas fa-user-shield"></i> 1. ACCESO DEL CLIENTE A LA WEB</div>
+                <div class="form-group">
+                    <label>Usuario para el Cliente:</label>
+                    <input type="text" id="nuevo-usuario" required placeholder="Ej: carlos20">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña para el Cliente:</label>
+                    <input type="text" id="nuevo-pass" required placeholder="Ej: hub7766">
+                </div>
+
+                <div class="section-separator"></div>
+                <div class="sub-title"><i class="fas fa-key"></i> 2. CREDENCIALES DE LA CUENTA REAL</div>
+                
+                <div class="form-group">
+                    <label>Plataforma Vendida:</label>
+                    <select id="nueva-plat">
+                        <option>Netflix Premium</option><option>Disney+</option><option>Max</option>
+                        <option>Crunchyroll+</option><option>Prime Video</option><option>Paramount+</option>
+                        <option>Vix Premium</option><option>Canva Pro</option><option>Spotify Premium</option>
+                        <option>YouTube Premium</option><option>IPTV</option><option>Apple TV+</option>
+                        <option>ChatGPT Plus</option><option>CapCut Pro</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top:10px;">
+                    <label>Correo / Usuario de la Cuenta:</label>
+                    <input type="text" id="nuevo-acceso-correo" required placeholder="ejemplo@cuenta.com">
+                </div>
+                <div class="form-group" style="margin-top:10px;">
+                    <label>Contraseña de la Cuenta:</label>
+                    <input type="text" id="nuevo-acceso-pass" required placeholder="ClaveStreaming123">
+                </div>
+
+                <div class="section-separator"></div>
+                <div class="sub-title"><i class="fas fa-user-tag"></i> 3. PERFIL Y PIN (DATOS DEL CLIENTE)</div>
+                <div class="form-group">
+                    <label>Nombre del Perfil / Correo Activación:</label>
+                    <input type="text" id="nuevo-perfil-nombre" required placeholder="Ej: Carlos R. / mi-correo@gmail.com">
+                </div>
+                <div class="form-group" style="margin-top:10px;">
+                    <label>PIN del Perfil (Si no lleva, dejar vacío):</label>
+                    <input type="text" id="nuevo-perfil-pin" placeholder="Ej: 1998">
+                </div>
+
+                <button type="submit" class="btn-add"><i class="fas fa-save"></i> Guardar y Asignar Cuenta</button>
+            </form>
+        </div>
+
+        <div class="admin-list">
+            <h2><i class="fas fa-database"></i> Base de Datos de Cuentas Asignadas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Plataforma</th>
+                        <th>Acceso Cuenta</th>
+                        <th>Perfil / PIN</th>
+                        <th>Vence En</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-clientes">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    // 🔐 CONTRASEÑA DE SEGURIDAD PARA TU PANEL DE ADMINISTRADOR
+// Puedes cambiar 'HubAdmin2026' por la clave secreta que tú quieras
+const CLAVE_MAESTRA = 'HubAdmin2026'; 
+
+// Función de bloqueo inmediato al cargar la página
+(function protegerPanel() {
+    let intento = prompt("🔐 Acceso Privado - STREAMING HOME HUB\n\nIngresa la contraseña de administrador:");
+    
+    if (intento !== CLAVE_MAESTRA) {
+        alert("❌ Contraseña incorrecta. Acceso denegado.");
+        window.location.href = 'index.html'; // Lo bota a la tienda si falla
+    } else {
+        alert("🔓 ¡Bienvenido Administrador!");
+    }
+})();
+
+// El resto de tu código original de admin.html sigue aquí abajo igual...
+document.addEventListener('DOMContentLoaded', mostrarClientes);
+// ...
+</body>
+</html>

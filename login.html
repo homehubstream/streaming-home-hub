@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamNeon - Iniciar Sesión</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="login-body">
+
+    <!-- BOTÓN PARA VOLVER A LA TIENDA -->
+    <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a la tienda</a>
+
+    <!-- CONTENEDOR PRINCIPAL DEL LOGIN -->
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>STREAM<span>NEON</span></h1>
+                <p>ZONA DE CLIENTES</p>
+            </div>
+
+            <form id="form-login" onsubmit="manejarLogin(event)">
+                <div class="form-group">
+                    <label for="login-user"><i class="fas fa-user"></i> Usuario o Correo:</label>
+                    <input type="text" id="login-user" placeholder="Ingresa tu usuario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-pass"><i class="fas fa-key"></i> Contraseña:</label>
+                    <input type="password" id="login-pass" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-login">Ingresar al Tablero <i class="fas fa-sign-in-alt"></i></button>
+            </form>
+            
+            <div class="login-footer">
+                <p><i class="fas fa-info-circle"></i> ¿No tienes tus accesos? Pídelos al administrador al realizar tu primera compra.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script rápido para simular el ingreso al Dashboard -->
+    <script>
+        function manejarLogin(event) {
+            event.preventDefault();
+            let user = document.getElementById('login-user').value.trim().toLowerCase();
+            let pass = document.getElementById('login-pass').value;
+            
+            // Traer la base de datos local
+            let database = JSON.parse(localStorage.getItem('hub_db')) || [];
+
+            // Validar si coinciden el usuario y contraseña creados por el admin
+            let usuarioValido = database.find(u => u.username === user && u.password === pass);
+
+            if (usuarioValido) {
+                // Guardar temporalmente quién inició sesión para saber qué mostrar en el tablero
+                localStorage.setItem('sesion_cliente', user);
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('❌ Usuario o contraseña incorrectos. Solicita tus accesos al soporte técnico.');
+            }
+        }
+    </script>
+</body>
+</html>
