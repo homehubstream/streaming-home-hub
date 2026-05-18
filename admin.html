@@ -17,6 +17,8 @@
         .admin-list { background: #13131a; padding: 25px; border-radius: 8px; width: 65%; border: 1px solid #222230; }
         select, input { width: 100%; padding: 10px; background: #0b0b0f; color: white; border: 1px solid #2a2a3a; border-radius: 6px; margin-top: 5px; outline: none;}
         select:focus, input:focus { border-color: #a200ff; }
+        optgroup { background: #13131a; color: #a200ff; font-weight: bold; }
+        option { color: white; font-weight: normal; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; color: white; font-size: 0.85rem;}
         th, td { padding: 12px; border-bottom: 1px solid #222230; text-align: left; }
         th { color: #a200ff; }
@@ -54,11 +56,33 @@
                 <div class="form-group">
                     <label>Plataforma Vendida:</label>
                     <select id="nueva-plat">
-                        <option>Netflix Premium</option><option>Disney+</option><option>Max</option>
-                        <option>Crunchyroll+</option><option>Prime Video</option><option>Paramount+</option>
-                        <option>Vix Premium</option><option>Canva Pro</option><option>Spotify Premium</option>
-                        <option>YouTube Premium</option><option>IPTV</option><option>Apple TV+</option>
-                        <option>ChatGPT Plus</option><option>CapCut Pro</option>
+                        <optgroup label="── CUENTAS DIGITALES ──">
+                            <option>Netflix Premium</option>
+                            <option>Disney+</option>
+                            <option>Max</option>
+                            <option>Prime Video</option>
+                            <option>Crunchyroll+</option>
+                            <option>Spotify Premium</option>
+                            <option>YouTube Premium</option>
+                            <option>Gemini Plus (S/ 3)</option>
+                            <option>ChatGPT Plus</option>
+                            <option>Canva Pro</option>
+                            <option>CapCut Pro</option>
+                            <option>Paramount+</option>
+                            <option>Vix Premium</option>
+                            <option>Apple TV+</option>
+                            <option>IPTV</option>
+                        </optgroup>
+                        
+                        <optgroup label="── PLATAFORMAS A DOMINIO ──">
+                            <option>Plataforma a Dominio</option>
+                            <option>Netflix a Dominio</option>
+                            <option>Disney+ a Dominio</option>
+                            <option>Max a Dominio</option>
+                            <option>Prime a Dominio</option>
+                            <option>Spotify a Dominio</option>
+                            <option>YouTube a Dominio</option>
+                        </optgroup>
                     </select>
                 </div>
                 <div class="form-group" style="margin-top:10px;">
@@ -106,7 +130,6 @@
     </div>
 
     <script>
-        // Tus credenciales oficiales de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDBNxBidzO-jH7jJrFQzsz2JBDwpk2pDFo",
             authDomain: "streaming-home-hub.firebaseapp.com",
@@ -117,11 +140,9 @@
             measurementId: "G-0XGB3PBZXG"
         };
 
-        // Inicializar Firebase de forma segura
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // Escuchar la base de datos en tiempo real
         db.collection("usuarios").onSnapshot((snapshot) => {
             mostrarClientes(snapshot);
         }, (error) => {
@@ -195,7 +216,7 @@
                         let row = tabla.insertRow();
                         row.innerHTML = `
                             <td><strong>${username}</strong> (Clave: ${user.password})</td>
-                            <td style="color:#9d4edd">${serv.plataforma}</td>
+                            <td style="color:#9d4edd; font-weight: bold;">${serv.plataforma}</td>
                             <td>${serv.accesoCorreo}<br><small style="color:#8b8b9a">${serv.accesoPass}</small></td>
                             <td>${serv.perfilNombre}<br><small style="color:#a200ff">PIN: ${serv.perfilPin}</small></td>
                             <td style="color:${colorDias}; font-weight:bold;">${textoDias}</td>
