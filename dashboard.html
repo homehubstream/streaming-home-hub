@@ -6,6 +6,9 @@
     <title>StreamNeon - Mi Tablero</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="dashboard-body">
 
@@ -22,94 +25,108 @@
     <main class="dash-container">
         <div class="dash-header">
             <h2><i class="fas fa-cubes"></i> Mis Servicios Contratados</h2>
-            <p>Monitorea tus accesos de streaming y fechas de renovación de manera automática.</p>
+            <p>Monitorea tus accesos de streaming y fechas de renovación en tiempo real.</p>
         </div>
 
-        <div class="services-grid" id="grid-servicios-cliente"></div>
+        <div class="services-grid" id="grid-servicios-cliente">
+            </div>
     </main>
 
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBNxBidzO-jH7jJrFQzsz2JBDwpk2pDFo",
+            authDomain: "streaming-home-hub.firebaseapp.com",
+            projectId: "streaming-home-hub",
+            storageBucket: "streaming-home-hub.firebasestorage.app",
+            messagingSenderId: "541294461205",
+            appId: "1:541294461205:web:bf0984d03dee964d52291c",
+            measurementId: "G-0XGB3PBZXG"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         document.addEventListener('DOMContentLoaded', () => {
             let clienteLogueado = localStorage.getItem('sesion_cliente');
             
             if (!clienteLogueado) {
-                // Si intentan entrar escribiendo el link sin loguearse, los bota al login
                 window.location.href = 'login.html';
                 return;
             }
 
             document.getElementById('user-display').innerText = clienteLogueado.toUpperCase();
 
-            let database = JSON.parse(localStorage.getItem('hub_db')) || [];
-            let datosUsuario = database.find(u => u.username === clienteLogueado);
             let grid = document.getElementById('grid-servicios-cliente');
-            grid.innerHTML = '';
+            
+            // Consultar datos a la nube en tiempo real
+            db.collection("usuarios").doc(clienteLogueado).onSnapshot((doc) => {
+                grid.innerHTML = '';
 
-            // Si el usuario no tiene servicios activos asignados por el admin
-            if (!datosUsuario || datosUsuario.servicios.length === 0) {
-                grid.innerHTML = `<p style="color:#8b8b9a; grid-column: 1/-1; text-align:center; padding: 40px;"><i class="fas fa-folder-open" style="font-size:2rem; color:#a200ff;"></i><br><br>Aún no tienes plataformas asignadas. Comunícate con soporte enviando tu captura de pago.</p>`;
-                return;
-            }
-
-            // Pintar cada plataforma que tú le agregaste desde el admin
-            datosUsuario.servicios.forEach(serv => {
-                let tiempoRestante = serv.vencimiento - Date.now();
-                let diasRestantes = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
-                
-                let badgeHTML = '';
-                let cardClass = 'dash-card';
-                let footerHTML = '';
-
-                if (diasRestantes <= 0) {
-                    badgeHTML = `<span class="badge-danger">❌ Cuenta Vencida</span>`;
-                    footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-times-circle"></i> Tu servicio ha caducado, solicita la renovación.</p>`;
-                } else if (diasRestantes === 1) {
-                    badgeHTML = `<span class="badge-danger pulse-effect">⚠️ Vence Mañana</span>`;
-                    cardClass = 'dash-card alert-glow';
-                    footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-exclamation-triangle"></i> Próximo a vencer. ¡Renueva hoy!</p>`;
-                } else {
-                    badgeHTML = `<span class="badge-days">Faltan ${diasRestantes} días</span>`;
-                    footerHTML = `<p class="expiry-date"><i class="far fa-calendar-check"></i> Estado de cuenta: Activo</p>`;
+                if (!doc.exists || !doc.data().servicios || doc.data().servicios.length === 0) {
+                    grid.innerHTML = `<p style="color:#8b8b9a; grid-column: 1/-1; text-align:center; padding: 40px;"><i class="fas fa-folder-open" style="font-size:2rem; color:#a200ff;"></i><br><br>Aún no tienes plataformas asignadas. Comunícate con soporte enviando tu captura de pago.</p>`;
+                    return;
                 }
 
-                // Ocultar la sección del PIN en la tarjeta si la cuenta no lleva PIN
-                let pinStyle = (serv.perfilPin === 'Sin PIN' || !serv.perfilPin) ? 'display:none;' : '';
+                doc.data().servicios.forEach(serv => {
+                    let tiempoRestante = serv.vencimiento - Date.now();
+                    let diasRestantes = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+                    
+                    let badgeHTML = '';
+                    let cardClass = 'dash-card';
+                    let footerHTML = '';
 
-                let card = document.createElement('div');
-                card.className = cardClass;
-                card.innerHTML = `
-                    <div class="dash-card-header">
-                        <div class="platform-title">
-                            <i class="fas fa-tv" style="color:#a200ff;"></i>
-                            <h3>${serv.plataforma}</h3>
-                        </div>
-                        ${badgeHTML}
-                    </div>
-                    <div class="dash-card-body">
-                        <div class="credential-row">
-                            <span><i class="fas fa-envelope"></i> Correo de Acceso:</span>
-                            <input type="text" value="${serv.accesoCorreo}" readonly onclick="this.select(); document.execCommand('copy');">
-                        </div>
-                        <div class="credential-row">
-                            <span><i class="fas fa-key"></i> Contraseña de Acceso:</span>
-                            <input type="text" value="${serv.accesoPass}" readonly onclick="this.select(); document.execCommand('copy');">
-                        </div>
-                        <div class="profile-info-box" style="${pinStyle}">
-                            <div class="info-item">
-                                <span class="label">Perfil</span>
-                                <span class="value">${serv.perfilNombre}</span>
+                    if (diasRestantes <= 0) {
+                        badgeHTML = `<span class="badge-danger">❌ Cuenta Vencida</span>`;
+                        footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-times-circle"></i> Tu servicio ha caducado, solicita la renovación.</p>`;
+                    } else if (diasRestantes === 1) {
+                        badgeHTML = `<span class="badge-danger pulse-effect">⚠️ Vence Mañana</span>`;
+                        cardClass = 'dash-card alert-glow';
+                        footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-exclamation-triangle"></i> Próximo a vencer. ¡Renueva hoy!</p>`;
+                    } else {
+                        badgeHTML = `<span class="badge-days">Faltan ${diasRestantes} días</span>`;
+                        footerHTML = `<p class="expiry-date"><i class="far fa-calendar-check"></i> Estado de cuenta: Activo</p>`;
+                    }
+
+                    let pinStyle = (serv.perfilPin === 'Sin PIN' || !serv.perfilPin) ? 'display:none;' : '';
+
+                    let card = document.createElement('div');
+                    card.className = cardClass;
+                    card.innerHTML = `
+                        <div class="dash-card-header">
+                            <div class="platform-title">
+                                <i class="fas fa-tv" style="color:#a200ff;"></i>
+                                <h3>${serv.plataforma}</h3>
                             </div>
-                            <div class="info-item">
-                                <span class="label">PIN</span>
-                                <span class="value-pin">${serv.perfilPin}</span>
+                            ${badgeHTML}
+                        </div>
+                        <div class="dash-card-body">
+                            <div class="credential-row">
+                                <span><i class="fas fa-envelope"></i> Correo de Acceso:</span>
+                                <input type="text" value="${serv.accesoCorreo}" readonly onclick="this.select(); document.execCommand('copy');">
+                            </div>
+                            <div class="credential-row">
+                                <span><i class="fas fa-key"></i> Contraseña de Acceso:</span>
+                                <input type="text" value="${serv.accesoPass}" readonly onclick="this.select(); document.execCommand('copy');">
+                            </div>
+                            <div class="profile-info-box" style="${pinStyle}">
+                                <div class="info-item">
+                                    <span class="label">Perfil</span>
+                                    <span class="value">${serv.perfilNombre}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label">PIN</span>
+                                    <span class="value-pin">${serv.perfilPin}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="dash-card-footer">
-                        ${footerHTML}
-                    </div>
-                `;
-                grid.appendChild(card);
+                        <div class="dash-card-footer">
+                            ${footerHTML}
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }, err => {
+                grid.innerHTML = `<p style="color:#ff0055; text-align:center;">Error de conexión con la base de datos.</p>`;
             });
         });
     </script>
