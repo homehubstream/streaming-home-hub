@@ -29,12 +29,10 @@
         </div>
 
         <div class="services-grid" id="grid-servicios-cliente">
-            <p style="color:#8b8b9a; text-align:center; grid-column: 1/-1; padding: 20px;">Buscando tus plataformas en la nube...</p>
-        </div>
+            </div>
     </main>
 
     <script>
-        // Tus credenciales oficiales de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDBNxBidzO-jH7jJrFQzsz2JBDwpk2pDFo",
             authDomain: "streaming-home-hub.firebaseapp.com",
@@ -49,6 +47,11 @@
         const db = firebase.firestore();
 
         document.addEventListener('DOMContentLoaded', () => {
+            // PEGA ESTO AQUÍ:
+            if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+
             let clienteLogueado = localStorage.getItem('sesion_cliente');
             
             if (!clienteLogueado) {
@@ -59,7 +62,6 @@
             document.getElementById('user-display').innerText = clienteLogueado.toUpperCase();
             let grid = document.getElementById('grid-servicios-cliente');
             
-            // Escuchar los servicios del cliente en tiempo real desde Firestore
             db.collection("usuarios").doc(clienteLogueado).onSnapshot((doc) => {
                 grid.innerHTML = '';
 
@@ -70,7 +72,7 @@
 
                 doc.data().servicios.forEach(serv => {
                     let tiempoRestante = serv.vencimiento - Date.now();
-                    let diasRestantes = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+                    let diasRestantes = tiempoRestante > 0 ? Math.floor(tiempoRestante / (1000 * 60 * 60 * 24)) : 0;
                     
                     let badgeHTML = '';
                     let cardClass = 'dash-card';
@@ -79,10 +81,21 @@
                     if (diasRestantes <= 0) {
                         badgeHTML = `<span class="badge-danger">❌ Cuenta Vencida</span>`;
                         footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-times-circle"></i> Tu servicio ha caducado.</p>`;
+                        cardClass = 'dash-card alert-glow';
+
+                        // Envío de la notificación nativa
+                        if (Notification.permission === "granted") {
+                            new Notification("⚠️ Servicio Vencido - STREAMING HOME HUB", {
+                                body: `Tu cuenta de ${serv.plataforma} ha llegado a 0 días y venció. Pide tu renovación con soporte.`,
+                                icon: "https://via.placeholder.com/100/a200ff/ffffff?text=HUB"
+                            });
+                        } else {
+                            alert(`🚨 ¡Atención! Tu servicio de ${serv.plataforma} ha vencido hoy.`);
+                        }
                     } else if (diasRestantes === 1) {
                         badgeHTML = `<span class="badge-danger pulse-effect">⚠️ Vence Mañana</span>`;
                         cardClass = 'dash-card alert-glow';
-                        footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-exclamation-triangle"></i> ¡Renueva hoy!</p>`;
+                        footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-exclamation-triangle"></i> ¡Te queda 1 día! Renueva hoy.</p>`;
                     } else {
                         badgeHTML = `<span class="badge-days">Faltan ${diasRestantes} días</span>`;
                         footerHTML = `<p class="expiry-date"><i class="far fa-calendar-check"></i> Estado de cuenta: Activo</p>`;
@@ -127,7 +140,7 @@
                     grid.appendChild(card);
                 });
             }, err => {
-                grid.innerHTML = `<p style="color:#ff0055; text-align:center;">Error de conexión con la base de datos.</p>`;
+                grid.innerHTML = `<p style="color:#ff0055; text-align:center;">Error de conexión.</p>`;
             });
         });
     </script>
