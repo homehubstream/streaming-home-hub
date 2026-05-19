@@ -85,6 +85,12 @@
                         </optgroup>
                     </select>
                 </div>
+                
+                <!-- NUEVO CAMPO: DÍAS DE SERVICIO -->
+                <div class="form-group" style="margin-top:10px;">
+                    <label>Días de Servicio Asignados:</label>
+                    <input type="number" id="nuevo-servicio-dias" required value="30" min="1" placeholder="Ej: 30">
+                </div>
                 <div class="form-group" style="margin-top:10px;">
                     <label>Correo / Usuario de la Cuenta:</label>
                     <input type="text" id="nuevo-acceso-correo" required placeholder="ejemplo@cuenta.com">
@@ -93,6 +99,19 @@
                     <label>Contraseña de la Cuenta:</label>
                     <input type="text" id="nuevo-acceso-pass" required placeholder="ClaveStreaming123">
                 </div>
+
+                <div class="form-group" style="margin-top:10px;">
+                    <label>Contraseña de la Cuenta:</label>
+                    <input type="text" id="nuevo-acceso-pass" required placeholder="ClaveStreaming123">
+                </div>
+
+                <!-- PEGA ESTO AQUÍ -->
+                <div class="form-group" style="margin-top:10px;">
+                    <label>Días de Servicio Asignados:</label>
+                    <input type="number" id="nuevo-servicio-dias" required value="30" min="1" placeholder="Ej: 30">
+                </div>
+
+                <div class="section-separator"></div>
 
                 <div class="section-separator"></div>
                 <div class="sub-title"><i class="fas fa-user-tag"></i> 3. PERFIL Y PIN (DATOS DEL CLIENTE)</div>
@@ -157,10 +176,12 @@
             let plataforma = document.getElementById('nueva-plat').value;
             let accesoCorreo = document.getElementById('nuevo-acceso-correo').value;
             let accesoPass = document.getElementById('nuevo-acceso-pass').value;
-            let perfilNombre = document.getElementById('nuevo-perfil-nombre').value;
+           let perfilNombre = document.getElementById('nuevo-perfil-nombre').value;
             let perfilPin = document.getElementById('nuevo-perfil-pin').value || 'Sin PIN';
 
-            let timestampVencimiento = Date.now() + (30 * 24 * 60 * 60 * 1000);
+            // PEGA ESTAS DOS LÍNEAS AQUÍ:
+            let diasServicio = parseInt(document.getElementById('nuevo-servicio-dias').value) || 30;
+            let timestampVencimiento = Date.now() + (diasServicio * 24 * 60 * 60 * 1000);
 
             let nuevoServicio = {
                 plataforma,
