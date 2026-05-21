@@ -6,24 +6,25 @@
     <title>StreamNeon - Iniciar Sesión</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="login-body">
 
-    <!-- BOTÓN PARA VOLVER A LA TIENDA -->
     <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Volver a la tienda</a>
 
-    <!-- CONTENEDOR PRINCIPAL DEL LOGIN -->
     <div class="login-wrapper">
         <div class="login-card">
             <div class="login-header">
-                <h1>STREAM<span>NEON</span></h1>
+                <h1>STREAMING<span>HOME HUB</span></h1>
                 <p>ZONA DE CLIENTES</p>
             </div>
 
             <form id="form-login" onsubmit="manejarLogin(event)">
                 <div class="form-group">
-                    <label for="login-user"><i class="fas fa-user"></i> Usuario o Correo:</label>
-                    <input type="text" id="login-user" placeholder="Ingresa tu usuario" required>
+                    <label for="login-user"><i class="fas fa-user"></i> Usuario o Teléfono:</label>
+                    <input type="text" id="login-user" placeholder="Ingresa tu usuario asignado" required>
                 </div>
 
                 <div class="form-group">
@@ -35,31 +36,38 @@
             </form>
             
             <div class="login-footer">
-                <p><i class="fas fa-info-circle"></i> ¿No tienes tus accesos? Pídelos al administrador al realizar tu primera compra.</p>
+                <p><i class="fas fa-info-circle"></i> Solicita tus accesos web oficiales al encargado de soporte técnico tras verificar tu pago.</p>
             </div>
         </div>
     </div>
 
-    <!-- Script rápido para simular el ingreso al Dashboard -->
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBNxBidzO-jH7jJrFQzsz2JBDwpk2pDFo",
+            authDomain: "streaming-home-hub.firebaseapp.com",
+            projectId: "streaming-home-hub",
+            storageBucket: "streaming-home-hub.firebasestorage.app",
+            messagingSenderId: "541294461205",
+            appId: "1:541294461205:web:bf0984d03dee964d52291c",
+            measurementId: "G-0XGB3PBZXG"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         function manejarLogin(event) {
             event.preventDefault();
             let user = document.getElementById('login-user').value.trim().toLowerCase();
-            let pass = document.getElementById('login-pass').value;
+            let pass = document.getElementById('login-pass').value.trim();
             
-            // Traer la base de datos local
-            let database = JSON.parse(localStorage.getItem('hub_db')) || [];
-
-            // Validar si coinciden el usuario y contraseña creados por el admin
-            let usuarioValido = database.find(u => u.username === user && u.password === pass);
-
-            if (usuarioValido) {
-                // Guardar temporalmente quién inició sesión para saber qué mostrar en el tablero
-                localStorage.setItem('sesion_cliente', user);
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('❌ Usuario o contraseña incorrectos. Solicita tus accesos al soporte técnico.');
-            }
+            db.collection("usuarios").doc(user).get().then((doc) => {
+                if (doc.exists && doc.data().password === pass) {
+                    localStorage.setItem('sesion_cliente', user);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('❌ Usuario o contraseña incorrectos. Verifica o consulta con soporte.');
+                }
+            }).catch(err => alert("Error de conexión: " + err));
         }
     </script>
 </body>
