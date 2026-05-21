@@ -172,7 +172,7 @@
             e.preventDefault();
             
             let username = document.getElementById('nuevo-usuario').value.trim().toLowerCase();
-            let pass = document.getElementById('nuevo-pass').value;
+            let pass = document.getElementById('nuevo-pass').value.trim();
             let plataforma = document.getElementById('nueva-plat').value;
             let accesoCorreo = document.getElementById('nuevo-acceso-correo').value;
             let accesoPass = document.getElementById('nuevo-acceso-pass').value;
@@ -197,6 +197,7 @@
             userRef.get().then((doc) => {
                 if (doc.exists) {
                     userRef.update({
+                        password: pass,
                         servicios: firebase.firestore.FieldValue.arrayUnion(nuevoServicio)
                     }).then(() => {
                         alert("¡Guardado en la Nube con éxito!");
