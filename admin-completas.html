@@ -6,7 +6,6 @@
     <title>Control de Cuentas Completas - STREAMING HOME HUB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- SDK de Firebase Compat v10 -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -480,11 +479,144 @@
         .hidden {
             display: none !important;
         }
+
+        /* ==========================================
+           OPTIMIZACIÓN EXCLUSIVA PARA CELULARES
+           ========================================== */
+        @media (max-width: 768px) {
+            /* 1. Adaptar el Header superior */
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 15px 4%;
+            }
+            .header h1 {
+                font-size: 1.1rem;
+            }
+            .header div {
+                display: flex;
+                width: 100%;
+                gap: 8px;
+            }
+            .header .nav-btn {
+                flex: 1;
+                text-align: center;
+                padding: 10px 5px;
+                font-size: 0.75rem;
+                margin-right: 0 !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+            }
+
+            /* 2. Reducir padding de contenedores principales */
+            .admin-container {
+                padding: 20px 4%;
+                gap: 20px;
+            }
+
+            /* 3. Evitar que el formulario lateral se quede pegajoso arriba */
+            .panel-form {
+                position: relative;
+                top: 0;
+                padding: 18px;
+            }
+
+            /* 4. Cabecera del catálogo y buscador */
+            .section-header-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .search-wrapper {
+                max-width: 100%;
+            }
+
+            /* 5. Asegurar cuadricula de 1 sola columna para las tarjetas */
+            .accounts-grid {
+                grid-template-columns: 1fr !important;
+                gap: 15px;
+            }
+            .account-card {
+                padding: 15px;
+            }
+
+            /* 6. Formatear credenciales para que no rompan por correos largos */
+            .credential-item {
+                font-size: 0.8rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+                border-bottom: 1px solid #111;
+                padding-bottom: 6px;
+                margin-bottom: 6px;
+            }
+            .credential-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+                margin-bottom: 0;
+            }
+            .credential-item strong {
+                word-break: break-all;
+                display: block;
+                width: 100%;
+            }
+
+            /* 7. Ajustar perfiles en pantallas estrechas */
+            .profile-row {
+                padding: 10px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .profile-status {
+                width: 100%;
+                justify-content: space-between;
+                border-top: 1px solid #222;
+                padding-top: 8px;
+            }
+            .btn-remove-profile {
+                padding: 6px;
+                font-size: 0.9rem;
+            }
+
+            /* 8. Reestructurar el mini-formulario inline en formato 2x2 */
+            .add-profile-form {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                padding-top: 15px;
+            }
+            .add-profile-form input.in-nombre {
+                grid-column: span 2;
+            }
+            .add-profile-form input.in-pin {
+                grid-column: span 1;
+            }
+            .add-profile-form input.in-dias {
+                grid-column: span 1;
+            }
+            .add-profile-form .btn-add-profile {
+                grid-column: span 2;
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+
+            /* 9. Ajustar caja de Login Protector en Celulares */
+            .login-box {
+                padding: 30px 20px;
+                width: 90%;
+            }
+            .login-box h2 {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- CAPA PROTECTORA DE INICIO DE SESIÓN -->
     <div id="login-barrier" class="login-overlay">
         <div class="login-box">
             <h2>Stream Hub <span>Admin</span></h2>
@@ -502,7 +634,6 @@
         </div>
     </div>
 
-    <!-- CONTENIDO GENERAL (OCULTO HASTA INICIAR SESIÓN) -->
     <div id="main-admin-content" class="hidden">
         <header class="header">
             <h1>Admin <span>Cuentas Completas</span></h1>
@@ -514,7 +645,6 @@
 
         <div class="admin-container">
             
-            <!-- SECCIÓN DE REGISTRO (FORMULARIO) -->
             <div class="panel-form">
                 <h2>Crear Cuenta Completa</h2>
                 <form id="form-registro-completa" onsubmit="crearCuentaCompleta(event)">
@@ -552,12 +682,10 @@
                 </form>
             </div>
 
-            <!-- SECCIÓN DE GRID DE CUENTAS ACTIVAS -->
             <div class="accounts-section">
                 <div class="section-header-row">
                     <h2><i class="fas fa-folder"></i> Cuentas en Servicio</h2>
                     
-                    <!-- BUSCADOR AGREGADO -->
                     <div class="search-wrapper">
                         <i class="fas fa-search"></i>
                         <input type="text" id="buscador-completas" class="search-input" placeholder="Buscar por correo, plataforma o cliente..." oninput="filtrarCuentasCompletas()">
@@ -761,7 +889,6 @@
                         </div>
                     </div>
 
-                    <!-- FORMULARIO INLINE PARA AGREGAR CLIENTES A ESTA CUENTA -->
                     <form class="add-profile-form" onsubmit="agregarPerfilAcuenta(event, '${cuentaId}')">
                         <input type="text" placeholder="Cliente" class="in-nombre" required>
                         <input type="text" placeholder="PIN" class="in-pin" maxlength="5">
