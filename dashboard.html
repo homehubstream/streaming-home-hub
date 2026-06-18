@@ -17,105 +17,75 @@
             <h1>STREAMING <span>HOME HUB</span></h1>
         </div>
         <div class="user-welcome">
-            <p><i class="fas fa-circle-user"></i> Cliente: <span id="user-display">Cargando...</span></p>
+            <p><i class="fas fa-circle-user"></i> Cliente: <span id=\"user-display\">Cargando...</span></p>
             <a href="login.html" class="btn-logout" onclick="localStorage.removeItem('sesion_cliente')"><i class="fas fa-sign-out-alt"></i> Salir</a>
         </div>
     </header>
 
     <main class="dash-container">
         <div class="dash-header">
-            <h2><i class="fas fa-cubes"></i> Mis Servicios Contratados</h2>
-            <p>Monitorea tus accesos de streaming y fechas de renovación en tiempo real.</p>
+            <h2><i class="fas fa-tv"></i> Mis Pantallas y Servicios Contratados</h2>
+            <p>Haciendo clic sobre el correo o la contraseña puedes copiarlos automáticamente.</p>
         </div>
 
-        <div class="services-grid" id="grid-servicios-cliente">
+        <div id="grid-servicios" class="dash-grid">
             </div>
     </main>
 
     <script>
+        // CONFIGURACIÓN DE TU NUEVO FIREBASE
         const firebaseConfig = {
-            apiKey: "AIzaSyDBNxBidzO-jH7jJrFQzsz2JBDwpk2pDFo",
-            authDomain: "streaming-home-hub.firebaseapp.com",
-            projectId: "streaming-home-hub",
-            storageBucket: "streaming-home-hub.firebasestorage.app",
-            messagingSenderId: "541294461205",
-            appId: "1:541294461205:web:bf0984d03dee964d52291c",
-            measurementId: "G-0XGB3PBZXG"
+            apiKey: "AIzaSyBhJN3z0RKeVyKDILbJ5w6QpCuEKrW3P1E",
+            authDomain: "streaming-home-hub-nuevo.firebaseapp.com",
+            projectId: "streaming-home-hub-nuevo",
+            storageBucket: "streaming-home-hub-nuevo.firebasestorage.app",
+            messagingSenderId: "732477886674",
+            appId: "1:732477886674:web:fb94a0498e8ec5cdda9d0b"
         };
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // PEGA ESTO AQUÍ:
-            if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-                Notification.requestPermission();
-            }
-
+        document.addEventListener("DOMContentLoaded", () => {
             let clienteLogueado = localStorage.getItem('sesion_cliente');
-            
-            if (!clienteLogueado) {
+            if(!clienteLogueado) {
                 window.location.href = 'login.html';
                 return;
             }
 
             document.getElementById('user-display').innerText = clienteLogueado.toUpperCase();
-            let grid = document.getElementById('grid-servicios-cliente');
-            
+            let grid = document.getElementById('grid-servicios');
+
             db.collection("usuarios").doc(clienteLogueado).onSnapshot((doc) => {
                 grid.innerHTML = '';
-
-                if (!doc.exists || !doc.data().servicios || doc.data().servicios.length === 0) {
-                    grid.innerHTML = `<p style="color:#8b8b9a; grid-column: 1/-1; text-align:center; padding: 40px;"><i class="fas fa-folder-open" style="font-size:2rem; color:#a200ff;"></i><br><br>Aún no tienes plataformas asignadas. Comunícate con soporte.</p>`;
+                if(!doc.exists || !doc.data().servicios || doc.data().servicios.length === 0) {
+                    grid.innerHTML = `<p style="text-align:center; color:#8b8b9a; grid-column: 1/-1; padding: 40px 0;">No tienes servicios activos actualmente. Adquiere uno en nuestra tienda principal.</p>`;
                     return;
                 }
 
-                doc.data().servicios.forEach(serv => {
-                    let tiempoRestante = serv.vencimiento - Date.now();
-                    let diasRestantes = tiempoRestante > 0 ? Math.floor(tiempoRestante / (1000 * 60 * 60 * 24)) : 0;
-                    
-                    let badgeHTML = '';
-                    let cardClass = 'dash-card';
-                    let footerHTML = '';
+                let servicios = doc.data().servicios;
 
-                    if (diasRestantes <= 0) {
-                        badgeHTML = `<span class="badge-danger">❌ Cuenta Vencida</span>`;
-                        footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-times-circle"></i> Tu servicio ha caducado.</p>`;
-                        cardClass = 'dash-card alert-glow';
+                servicios.forEach(serv => {
+                    let fVenc = new Date(serv.fechaVencimiento);
+                    let hoy = new Date();
+                    let difTiempo = fVenc.getTime() - hoy.getTime();
+                    let diasRestantes = Math.ceil(difTiempo / (1000 * 60 * 60 * 24));
 
-                        // Envío de la notificación nativa
-                        if (Notification.permission === "granted") {
-                            new Notification("⚠️ Servicio Vencido - STREAMING HOME HUB", {
-                                body: `Tu cuenta de ${serv.plataforma} ha llegado a 0 días y venció. Pide tu renovación con soporte.`,
-                                icon: "https://via.placeholder.com/100/a200ff/ffffff?text=HUB"
-                            });
-                        } else {
-                            alert(`🚨 ¡Atención! Tu servicio de ${serv.plataforma} ha vencido hoy.`);
-                        }
-                    } else if (diasRestantes === 1) {
-                        badgeHTML = `<span class="badge-danger pulse-effect">⚠️ Vence Mañana</span>`;
-                        cardClass = 'dash-card alert-glow';
-                        footerHTML = `<p class="expiry-date danger-text"><i class="fas fa-exclamation-triangle"></i> ¡Te queda 1 día! Renueva hoy.</p>`;
-                    } else {
-                        badgeHTML = `<span class="badge-days">Faltan ${diasRestantes} días</span>`;
-                        footerHTML = `<p class="expiry-date"><i class="far fa-calendar-check"></i> Estado de cuenta: Activo</p>`;
-                    }
+                    let badgeHTML = diasRestantes > 0 ? `<span class="badge-status active"><i class="fas fa-check-circle"></i> Activo (${diasRestantes} días)</span>` : `<span class="badge-status expired"><i class="fas fa-exclamation-circle"></i> Vencido</span>`;
+                    let footerHTML = diasRestantes > 0 ? `<p class="venc-text">Vence el: ${fVenc.toLocaleDateString('es-ES')}</p>` : `<a href="https://wa.me/51916982923?text=Hola%20Streaming%20Home%20Hub,%20quiero%20renovar%20mi%20cuenta%20de%20${encodeURIComponent(serv.plataforma)}" target="_blank" class="btn-renew">Renovar Cuenta Ahora</a>`;
 
-                    let pinStyle = (serv.perfilPin === 'Sin PIN' || !serv.perfilPin) ? 'display:none;' : '';
+                    let pinStyle = (serv.perfilPin.toLowerCase() === 's/n' || serv.perfilPin === '') ? 'display:none;' : '';
 
                     let card = document.createElement('div');
-                    card.className = cardClass;
+                    card.className = 'dash-card';
                     card.innerHTML = `
                         <div class="dash-card-header">
-                            <div class="platform-title">
-                                <i class="fas fa-tv" style="color:#a200ff;"></i>
-                                <h3>${serv.plataforma}</h3>
-                            </div>
+                            <h3>${serv.plataforma}</h3>
                             ${badgeHTML}
                         </div>
                         <div class="dash-card-body">
                             <div class="credential-row">
-                                <span><i class="fas fa-envelope"></i> Correo de Acceso:</span>
+                                <span><i class="fas fa-envelope"></i> Correo de Ingreso:</span>
                                 <input type="text" value="${serv.accesoCorreo}" readonly onclick="this.select(); document.execCommand('copy');">
                             </div>
                             <div class="credential-row">
