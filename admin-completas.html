@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control de Cuentas Completas - STREAMING HOME HUB</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link class="fluid-css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -484,7 +484,6 @@
            OPTIMIZACIÓN EXCLUSIVA PARA CELULARES
            ========================================== */
         @media (max-width: 768px) {
-            /* 1. Adaptar el Header superior */
             .header {
                 flex-direction: column;
                 gap: 15px;
@@ -511,20 +510,17 @@
                 gap: 4px;
             }
 
-            /* 2. Reducir padding de contenedores principales */
             .admin-container {
                 padding: 20px 4%;
                 gap: 20px;
             }
 
-            /* 3. Evitar que el formulario lateral se quede pegajoso arriba */
             .panel-form {
                 position: relative;
                 top: 0;
                 padding: 18px;
             }
 
-            /* 4. Cabecera del catálogo y buscador */
             .section-header-row {
                 flex-direction: column;
                 align-items: stretch;
@@ -534,7 +530,6 @@
                 max-width: 100%;
             }
 
-            /* 5. Asegurar cuadricula de 1 sola columna para las tarjetas */
             .accounts-grid {
                 grid-template-columns: 1fr !important;
                 gap: 15px;
@@ -543,7 +538,6 @@
                 padding: 15px;
             }
 
-            /* 6. Formatear credenciales para que no rompan por correos largos */
             .credential-item {
                 font-size: 0.8rem;
                 flex-direction: column;
@@ -564,7 +558,6 @@
                 width: 100%;
             }
 
-            /* 7. Ajustar perfiles en pantallas estrechas */
             .profile-row {
                 padding: 10px;
                 flex-direction: column;
@@ -582,7 +575,6 @@
                 font-size: 0.9rem;
             }
 
-            /* 8. Reestructurar el mini-formulario inline en formato 2x2 */
             .add-profile-form {
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
@@ -603,7 +595,6 @@
                 font-size: 0.9rem;
             }
 
-            /* 9. Ajustar caja de Login Protector en Celulares */
             .login-box {
                 padding: 30px 20px;
                 width: 90%;
@@ -701,15 +692,14 @@
     </div>
 
     <script>
-        // Configuración de Firebase - Utiliza tus credenciales exactas
+        // CONFIGURACIÓN DE TU NUEVO FIREBASE ASIGNADA CORRECTAMENTE
         const firebaseConfig = {
-            apiKey: "AIzaSyDBNxBidzO-jH7jJrFQzsz2JBDwpk2pDFo",
-            authDomain: "streaming-home-hub.firebaseapp.com",
-            projectId: "streaming-home-hub",
-            storageBucket: "streaming-home-hub.firebasestorage.app",
-            messagingSenderId: "541294461205",
-            appId: "1:541294461205:web:bf0984d03dee964d52291c",
-            measurementId: "G-0XGB3PBZXG"
+            apiKey: "AIzaSyBhJN3z0RKeVyKDILbJ5w6QpCuEKrW3P1E",
+            authDomain: "streaming-home-hub-nuevo.firebaseapp.com",
+            projectId: "streaming-home-hub-nuevo",
+            storageBucket: "streaming-home-hub-nuevo.firebasestorage.app",
+            messagingSenderId: "732477886674",
+            appId: "1:732477886674:web:fb94a0498e8ec5cdda9d0b"
         };
 
         // Inicializar Firebase
@@ -719,7 +709,7 @@
         // Almacén local de datos descargados para permitir búsquedas instantáneas
         let cuentasLocalesCache = [];
 
-        // 1. SISTEMA DE SEGURIDAD (USER: homehub | PASS: homehub2026)
+        // 1. SISTEMA DE SEGURIDAD (USER: homehub | PASS: Peruu2026)
         document.addEventListener("DOMContentLoaded", () => {
             const sesionActiva = sessionStorage.getItem("admin_completas_auth");
             if (sesionActiva === "granted") {
