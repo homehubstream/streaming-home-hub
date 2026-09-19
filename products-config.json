@@ -1,0 +1,137 @@
+[
+  {
+    "id": "netflix",
+    "name": "Netflix Premium",
+    "price": 9,
+    "whatsappPrice": 10,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#E50914"
+  },
+  {
+    "id": "disney",
+    "name": "Disney+ Full ESPN",
+    "price": 5.5,
+    "whatsappPrice": 6,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#1130CC"
+  },
+  {
+    "id": "max",
+    "name": "Max (HBO Max)",
+    "price": 2.5,
+    "whatsappPrice": 3,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#6A0DAD"
+  },
+  {
+    "id": "crunchyroll",
+    "name": "Crunchyroll Premium",
+    "price": 2,
+    "whatsappPrice": 3,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#F47521"
+  },
+  {
+    "id": "primevideo",
+    "name": "Prime Video",
+    "price": 3,
+    "whatsappPrice": 4,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#00A8E0"
+  },
+  {
+    "id": "paramount",
+    "name": "Paramount+",
+    "price": 5,
+    "whatsappPrice": 5,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#0064FF"
+  },
+  {
+    "id": "vix",
+    "name": "Vix Premium",
+    "price": 2,
+    "whatsappPrice": 3,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#FF2D55"
+  },
+  {
+    "id": "canva",
+    "name": "Canva Pro",
+    "price": 3.5,
+    "whatsappPrice": 4,
+    "soldOut": false,
+    "category": "tools",
+    "color": "#7D2AE7"
+  },
+  {
+    "id": "spotify",
+    "name": "Spotify Premium",
+    "price": 6,
+    "whatsappPrice": 7,
+    "soldOut": false,
+    "category": "music",
+    "color": "#1DB954"
+  },
+  {
+    "id": "youtube",
+    "name": "YouTube Premium",
+    "price": 2.5,
+    "whatsappPrice": 4,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#FF0000"
+  },
+  {
+    "id": "iptv",
+    "name": "IPTV (Canales del Mundo)",
+    "price": 6,
+    "whatsappPrice": 6,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#FF6B00"
+  },
+  {
+    "id": "appletv",
+    "name": "Apple TV+",
+    "price": 5,
+    "whatsappPrice": 5,
+    "soldOut": false,
+    "category": "streaming",
+    "color": "#a0a0a0"
+  },
+  {
+    "id": "chatgpt",
+    "name": "ChatGPT Plus",
+    "price": 6,
+    "whatsappPrice": 6,
+    "soldOut": false,
+    "category": "ai",
+    "color": "#10A37F"
+  },
+  {
+    "id": "capcut",
+    "name": "CapCut Pro",
+    "price": 6,
+    "whatsappPrice": 6,
+    "soldOut": false,
+    "category": "tools",
+    "color": "#000000"
+  },
+  {
+    "id": "gemini",
+    "name": "Gemini Pro",
+    "price": 2.5,
+    "whatsappPrice": 4,
+    "soldOut": false,
+    "category": "ai",
+    "color": "#4f8ef7"
+  }
+]
